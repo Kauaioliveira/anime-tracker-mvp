@@ -1,15 +1,31 @@
-export default function SearchBar() {
+type SearchBarProps = {
+  value: string
+  onChange: (value: string) => void
+  onSearch: () => void
+}
+
+export default function SearchBar({ value, onChange, onSearch }: SearchBarProps) {
   return (
-    <section className="search-bar" aria-label="Search bar (visual only)">
+    <form
+      className="search-bar"
+      role="search"
+      aria-label="Search anime"
+      onSubmit={(e) => {
+        e.preventDefault()
+        onSearch()
+      }}
+    >
       <input
         className="search-bar__input"
         type="search"
-        placeholder="Search anime (coming soon)"
-        readOnly
+        placeholder="Search by title…"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        autoComplete="off"
       />
-      <button type="button" className="search-bar__btn">
+      <button type="submit" className="search-bar__btn">
         Search
       </button>
-    </section>
+    </form>
   )
 }
