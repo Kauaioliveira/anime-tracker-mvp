@@ -100,6 +100,40 @@ body {
     line-height: 1.25;
     color: var(--text-h);
   }
+
+  .anime-card__link { 
+    text-decoration: none;
+    color: inherit;
+    display: block; 
+  }
+
+  .anime-card__link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .anime-detail__title {
+    margin-top: 0;
+    color: var(--text-h);
+  }
+  
+  .anime-detail__layout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: flex-start;
+  }
+  
+  .anime-detail__img {
+    border-radius: 10px;
+    max-width: 100%;
+  }
+  
+  .anime-detail__synopsis {
+    max-width: 50rem;
+    line-height: 1.5;
+  }
   
   .app__status {
     margin: 0 0 1rem;
