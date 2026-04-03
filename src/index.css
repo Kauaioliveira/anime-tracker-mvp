@@ -25,6 +25,13 @@ body {
   font-family: system-ui, sans-serif;
 }
 
+.app-header {
+  text-align: center;
+  padding: 1rem 1.25rem 0.75rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
 /* --- Anime Tracker layout --- */
 .app__main {
     max-width: 1200px;

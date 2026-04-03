@@ -59,7 +59,7 @@ function App() {
     <div className="app">
       <Header
         title="Anime Tracker"
-        description="Acompanhe seus animes favoritos e torne sua experiência de assistir animes mais divertida."
+        description="Follow your favorite animes and make your anime-watching experience more fun."
       />
 
       <main className="app__main">

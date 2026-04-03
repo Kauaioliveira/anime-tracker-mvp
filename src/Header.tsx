@@ -5,7 +5,7 @@ type HeaderProps = {
 
 function Header({ title, description }: HeaderProps) {
   return (
-    <header>
+    <header className="app-header">
       <h1>{title}</h1>
       <p>{description}</p>
     </header>
