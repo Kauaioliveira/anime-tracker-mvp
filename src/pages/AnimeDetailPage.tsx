@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import type { AnimeDetail, JikanAnimeDetailResponse } from '../types/anime.ts'
+import { useFavoritesContext } from '../context/FavoritesContext.tsx'
 
 export default function AnimeDetailPage() {
   const { id } = useParams()
   const [anime, setAnime] = useState<AnimeDetail | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-
+  const { isFavorite, toggleFavorite } = useFavoritesContext()
   useEffect(() => {
     if (id === undefined) {
       setError('Missing id')
@@ -66,7 +67,24 @@ export default function AnimeDetailPage() {
 
         {!loading && !error && anime !== null && (
           <>
-            <h1 className="anime-detail__title">{anime.title}</h1>
+            <div className="anime-detail__heading">
+              <h1 className="anime-detail__title">{anime.title}</h1>
+              <button
+                type="button"
+                className="anime-detail__fav-btn"
+                onClick={() =>
+                  toggleFavorite({
+                    mal_id: anime.mal_id,
+                    title: anime.title,
+                    image_url: anime.images.jpg.image_url,
+                  })
+                }
+              >
+                {isFavorite(anime.mal_id)
+                  ? 'Remove from favorites'
+                  : 'Add to favorites'}
+              </button>
+            </div>
             <div className="anime-detail__layout">
               <img
                 className="anime-detail__img"

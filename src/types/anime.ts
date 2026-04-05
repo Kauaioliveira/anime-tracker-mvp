@@ -18,6 +18,13 @@ export type JikanAnimeDetailResponse = {
   data: AnimeDetail
 }
 
+/** Guardado no localStorage (lista de favoritos) */
+export type FavoriteAnime = {
+  mal_id: number
+  title: string
+  image_url: string
+}
+
 export type AnimeDetail = {
   mal_id: number
   title: string

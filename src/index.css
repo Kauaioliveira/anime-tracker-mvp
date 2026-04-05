@@ -25,6 +25,19 @@ body {
   font-family: system-ui, sans-serif;
 }
 
+.anime-card__fav {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 2;
+  cursor: pointer;
+  background: var(--bg);
+  border: none;
+  border-radius: 999px;
+  padding: 0.25rem 0.5rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
 .app-header {
   text-align: center;
   padding: 1rem 1.25rem 0.75rem;
@@ -80,10 +93,31 @@ body {
   }
   
   .anime-card {
+    position: relative;
     border: 1px solid var(--border);
     border-radius: 10px;
     overflow: hidden;
     background: var(--bg);
+  }
+
+  .anime-card__fav {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    z-index: 2;
+    cursor: pointer;
+    border: none;
+    border-radius: 999px;
+    padding: 0.25rem 0.5rem;
+    font-size: 1rem;
+    line-height: 1;
+    background: var(--bg);
+    color: var(--text-h);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  }
+
+  .anime-card__fav:hover {
+    filter: brightness(0.95);
   }
   
   .anime-card__img {
@@ -113,9 +147,33 @@ body {
     color: inherit;
   }
   
+  .anime-detail__heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
   .anime-detail__title {
-    margin-top: 0;
+    margin: 0;
+    flex: 1;
+    min-width: 200px;
     color: var(--text-h);
+  }
+
+  .anime-detail__fav-btn {
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--accent-border);
+    background: var(--accent-bg);
+    color: var(--text-h);
+    font: inherit;
+  }
+
+  .anime-detail__fav-btn:hover {
+    filter: brightness(0.97);
   }
   
   .anime-detail__layout {
