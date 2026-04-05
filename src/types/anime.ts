@@ -9,7 +9,15 @@ export type Anime = {
   }
 }
 
+/** Paginação em /v4/top/anime e /v4/anime (lista) */
+export type JikanPagination = {
+  current_page: number
+  last_visible_page: number
+  has_next_page: boolean
+}
+
 export type JikanTopAnimeResponse = {
+  pagination: JikanPagination
   data: Anime[]
 }
 
