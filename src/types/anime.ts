@@ -1,7 +1,20 @@
-/** Minimal fields from Jikan v4 (e.g. /v4/top/anime) */
+/** Entidade com nome (estúdio, produtor, etc.) */
+export type JikanNamedEntity = {
+  mal_id: number
+  name: string
+  type?: string
+}
+
+/** Minimal fields from Jikan v4 (e.g. /v4/top/anime, /v4/anime) */
 export type Anime = {
   mal_id: number
   title: string
+  aired?: {
+    from: string | null
+    to: string | null
+    string?: string
+  }
+  studios?: JikanNamedEntity[]
   images: {
     jpg: {
       image_url: string
@@ -39,10 +52,27 @@ export type AnimeDetail = {
   synopsis: string | null
   episodes: number | null
   score: number | null
+  aired?: {
+    from: string | null
+    to: string | null
+    string?: string
+  }
+  studios?: JikanNamedEntity[]
   images: {
     jpg: {
       image_url: string
       large_image_url: string
     }
   }
+}
+
+/** Item em GET /v4/producers?q= */
+export type JikanProducerItem = {
+  mal_id: number
+  titles?: { type: string; title: string }[]
+  title?: string
+}
+
+export type JikanProducerSearchResponse = {
+  data: JikanProducerItem[]
 }

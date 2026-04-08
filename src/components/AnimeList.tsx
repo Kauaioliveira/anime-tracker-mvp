@@ -1,6 +1,8 @@
 import type { Anime } from '../types/anime.ts'
 import AnimeCard from './AnimeCard.tsx'
 
+/** Componente que exibe uma lista de animes */
+/** Propriedades da lista de animes */
 type AnimeListProps = {
   animes: Anime[]
 }

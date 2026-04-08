@@ -1,7 +1,23 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
+import { Star } from 'lucide-react'
 import type { AnimeDetail, JikanAnimeDetailResponse } from '../types/anime.ts'
 import { useFavoritesContext } from '../context/FavoritesContext.tsx'
+
+function formatAired(detail: AnimeDetail): string {
+  if (detail.aired?.string !== undefined && detail.aired.string !== '') {
+    return detail.aired.string
+  }
+  const from = detail.aired?.from
+  const to = detail.aired?.to
+  if (from === null || from === undefined || from === '') {
+    return '—'
+  }
+  if (to === null || to === undefined || to === '') {
+    return from.slice(0, 10)
+  }
+  return `${from.slice(0, 10)} → ${to.slice(0, 10)}`
+}
 
 export default function AnimeDetailPage() {
   const { id } = useParams()
@@ -72,6 +88,11 @@ export default function AnimeDetailPage() {
               <button
                 type="button"
                 className="anime-detail__fav-btn"
+                aria-label={
+                  isFavorite(anime.mal_id)
+                    ? 'Remove from favorites'
+                    : 'Add to favorites'
+                }
                 onClick={() =>
                   toggleFavorite({
                     mal_id: anime.mal_id,
@@ -80,9 +101,22 @@ export default function AnimeDetailPage() {
                   })
                 }
               >
-                {isFavorite(anime.mal_id)
-                  ? 'Remove from favorites'
-                  : 'Add to favorites'}
+                {isFavorite(anime.mal_id) ? (
+                  <Star
+                    size={20}
+                    className="anime-detail__fav-icon anime-detail__fav-icon--on"
+                    fill="currentColor"
+                    strokeWidth={1.5}
+                    aria-hidden
+                  />
+                ) : (
+                  <Star size={20} className="anime-detail__fav-icon" aria-hidden />
+                )}
+                <span className="anime-detail__fav-label">
+                  {isFavorite(anime.mal_id)
+                    ? 'Remove from favorites'
+                    : 'Add to favorites'}
+                </span>
               </button>
             </div>
             <div className="anime-detail__layout">
@@ -93,6 +127,15 @@ export default function AnimeDetailPage() {
                 width={300}
               />
               <div>
+                <p>
+                  <strong>Aired:</strong> {formatAired(anime)}
+                </p>
+                <p>
+                  <strong>Studios:</strong>{' '}
+                  {anime.studios !== undefined && anime.studios.length > 0
+                    ? anime.studios.map((s) => s.name).join(', ')
+                    : '—'}
+                </p>
                 <p>
                   <strong>Score:</strong> {anime.score ?? '—'}
                 </p>
