@@ -11,17 +11,34 @@ node_modules
 dist
 dist-ssr
 *.local
+
+# Environment (secrets / machine-specific)
 .env
-.env.local
+.env.*
+!.env.example
+
+# Vite / tooling caches
+.vite
+.cache
+.eslintcache
+*.tsbuildinfo
+
+# Optional: test coverage (if you add Vitest/Jest later)
+coverage
 
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
 .idea
-.DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+.cursor
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini

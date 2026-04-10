@@ -1,4 +1,4 @@
-/** Entidade com nome (estúdio, produtor, etc.) */
+/** Named entity from Jikan (studio, producer, etc.) */
 export type JikanNamedEntity = {
   mal_id: number
   name: string
@@ -9,6 +9,7 @@ export type JikanNamedEntity = {
 export type Anime = {
   mal_id: number
   title: string
+  score?: number | null
   aired?: {
     from: string | null
     to: string | null
@@ -22,7 +23,7 @@ export type Anime = {
   }
 }
 
-/** Paginação em /v4/top/anime e /v4/anime (lista) */
+/** Pagination on /v4/top/anime and /v4/anime list endpoints */
 export type JikanPagination = {
   current_page: number
   last_visible_page: number
@@ -34,12 +35,12 @@ export type JikanTopAnimeResponse = {
   data: Anime[]
 }
 
-/** Resposta GET /v4/anime/{id} — o anime vem em .data */
+/** GET /v4/anime/{id} — anime is in `.data` */
 export type JikanAnimeDetailResponse = {
   data: AnimeDetail
 }
 
-/** Guardado no localStorage (lista de favoritos) */
+/** Stored in localStorage for user lists */
 export type FavoriteAnime = {
   mal_id: number
   title: string
@@ -66,7 +67,7 @@ export type AnimeDetail = {
   }
 }
 
-/** Item em GET /v4/producers?q= */
+/** Item from GET /v4/producers?q= */
 export type JikanProducerItem = {
   mal_id: number
   titles?: { type: string; title: string }[]

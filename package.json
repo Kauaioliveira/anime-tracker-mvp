@@ -8,6 +8,8 @@
     "build": "tsc -b && vite build",
     "typecheck": "tsc -b",
     "lint": "eslint .",
+    "knip": "knip",
+    "knip:full": "knip --dependencies --exports --files --include-entry-exports --include-libs --reporter compact --no-progress",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -26,6 +28,7 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.4.0",
+    "knip": "^5.88.1",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.57.2",
     "vite": "^8.0.1"

@@ -1,7 +1,15 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import Header from '../Header.tsx'
+import { useSearchParams } from 'react-router-dom'
 import SearchBar from '../components/SearchBar.tsx'
+import AnimeScrollRow from '../components/AnimeScrollRow.tsx'
+import AnimeScrollRowSkeleton from '../components/AnimeScrollRowSkeleton.tsx'
 import AnimeList from '../components/AnimeList.tsx'
+import AnimeListSkeleton from '../components/AnimeListSkeleton.tsx'
+import PaginationNav from '../components/PaginationNav.tsx'
+import {
+  getSpotlightCopy,
+  getSpotlightFeedUrl,
+} from '../config/homeSpotlight.ts'
 import type {
   Anime,
   JikanPagination,
@@ -9,6 +17,7 @@ import type {
   JikanTopAnimeResponse,
 } from '../types/anime.ts'
 import type { SearchMode } from '../types/searchMode.ts'
+import { fetchJikan, jikanErrorMessage } from '../lib/jikanFetch.ts'
 
 const LIMIT = '12'
 const JIKAN = 'https://api.jikan.moe/v4'
@@ -51,11 +60,55 @@ function buildListUrl(state: ListFeedState, page: number): string {
   return `${JIKAN}/anime?${params.toString()}`
 }
 
+function pageFromSearchParams(searchParams: URLSearchParams): number {
+  const raw = searchParams.get('page')
+  if (raw === null || raw === '') {
+    return 1
+  }
+  const n = Number.parseInt(raw, 10)
+  if (!Number.isFinite(n) || n < 1) {
+    return 1
+  }
+  return n
+}
+
 export default function HomePage() {
+  const [searchParams, setSearchParams] = useSearchParams()
+  const page = pageFromSearchParams(searchParams)
+
+  const goToPage = useCallback(
+    (next: number) => {
+      const clamped = Math.max(1, next)
+      setSearchParams(
+        (prev) => {
+          const q = new URLSearchParams(prev)
+          if (clamped <= 1) {
+            q.delete('page')
+          } else {
+            q.set('page', String(clamped))
+          }
+          return q
+        },
+        { replace: false },
+      )
+    },
+    [setSearchParams],
+  )
+
+  const resetPageInUrl = useCallback(() => {
+    setSearchParams(
+      (prev) => {
+        const q = new URLSearchParams(prev)
+        q.delete('page')
+        return q
+      },
+      { replace: true },
+    )
+  }, [setSearchParams])
+
   const [searchMode, setSearchMode] = useState<SearchMode>('title')
   const [inputQuery, setInputQuery] = useState('')
   const [listState, setListState] = useState<ListFeedState>({ kind: 'top' })
-  const [page, setPage] = useState(1)
 
   const feedUrl = useMemo(
     () => buildListUrl(listState, page),
@@ -68,6 +121,43 @@ export default function HomePage() {
   const [searchBusy, setSearchBusy] = useState(false)
   const [loadError, setLoadError] = useState<string | null>(null)
   const [searchError, setSearchError] = useState<string | null>(null)
+  const [spotlight, setSpotlight] = useState<Anime[]>([])
+  const [spotlightLoading, setSpotlightLoading] = useState(true)
+
+  const spotlightCopy = useMemo(() => getSpotlightCopy(), [])
+
+  useEffect(() => {
+    let cancelled = false
+    /** Stagger spotlight after the main list request to avoid burst 429s from Jikan. */
+    const timerId = window.setTimeout(() => {
+      void (async () => {
+        try {
+          const res = await fetchJikan(getSpotlightFeedUrl(JIKAN))
+          if (res.ok) {
+            const json = (await res.json()) as JikanTopAnimeResponse
+            if (!cancelled) {
+              setSpotlight(json.data)
+            }
+          } else if (!cancelled) {
+            setSpotlight([])
+          }
+        } catch {
+          if (!cancelled) {
+            setSpotlight([])
+          }
+        } finally {
+          if (!cancelled) {
+            setSpotlightLoading(false)
+          }
+        }
+      })()
+    }, 1100)
+
+    return () => {
+      cancelled = true
+      window.clearTimeout(timerId)
+    }
+  }, [])
 
   useEffect(() => {
     let cancelled = false
@@ -76,9 +166,9 @@ export default function HomePage() {
       setLoading(true)
       setLoadError(null)
       try {
-        const res = await fetch(feedUrl)
+        const res = await fetchJikan(feedUrl)
         if (!res.ok) {
-          throw new Error(`HTTP ${res.status}`)
+          throw new Error(jikanErrorMessage(res.status))
         }
         const json = (await res.json()) as JikanTopAnimeResponse
         if (!cancelled) {
@@ -87,7 +177,9 @@ export default function HomePage() {
         }
       } catch (e) {
         if (!cancelled) {
-          setLoadError(e instanceof Error ? e.message : 'Failed to load')
+          setLoadError(
+            e instanceof Error ? e.message : 'Failed to load',
+          )
           setPagination(null)
         }
       } finally {
@@ -103,18 +195,29 @@ export default function HomePage() {
     }
   }, [feedUrl])
 
+  useEffect(() => {
+    if (pagination === null) {
+      return
+    }
+    const last = pagination.last_visible_page
+    if (last < 1 || page <= last) {
+      return
+    }
+    goToPage(last)
+  }, [pagination, page, goToPage])
+
   const handleModeChange = useCallback((mode: SearchMode) => {
     setSearchMode(mode)
     setInputQuery('')
     setListState({ kind: 'top' })
-    setPage(1)
+    resetPageInUrl()
     setSearchError(null)
     setLoadError(null)
-  }, [])
+  }, [resetPageInUrl])
 
   const handleSearch = useCallback(async () => {
     const raw = inputQuery.trim()
-    setPage(1)
+    resetPageInUrl()
     setSearchError(null)
 
     if (searchMode === 'title') {
@@ -145,9 +248,9 @@ export default function HomePage() {
     setSearchBusy(true)
     try {
       const params = new URLSearchParams({ q: raw })
-      const res = await fetch(`${JIKAN}/producers?${params.toString()}`)
+      const res = await fetchJikan(`${JIKAN}/producers?${params.toString()}`)
       if (!res.ok) {
-        throw new Error(`HTTP ${res.status}`)
+        throw new Error(jikanErrorMessage(res.status))
       }
       const json = (await res.json()) as JikanProducerSearchResponse
       const first = json.data?.[0]
@@ -163,68 +266,70 @@ export default function HomePage() {
     } finally {
       setSearchBusy(false)
     }
-  }, [inputQuery, searchMode])
+  }, [inputQuery, searchMode, resetPageInUrl])
 
-  const busy = loading || searchBusy
   const showList = !loading && !loadError
+  const listSkeletonCount = Number.parseInt(LIMIT, 10) || 12
 
   return (
-    <div className="app">
-      <Header
-        title="Anime Tracker"
-        description="Follow your favorite animes and make your anime-watching experience more fun."
+    <main className="app__main">
+      <section className="home-hero" aria-labelledby="home-heading">
+        <h1 id="home-heading" className="home-hero__title">
+          Anime Tracker
+        </h1>
+        <p className="home-hero__description">
+          Track your favorite anime and keep lists of what you have watched and
+          what you plan to watch next.
+        </p>
+      </section>
+
+      <SearchBar
+        mode={searchMode}
+        onModeChange={handleModeChange}
+        value={inputQuery}
+        onChange={setInputQuery}
+        onSearch={() => {
+          void handleSearch()
+        }}
       />
 
-      <main className="app__main">
-        <SearchBar
-          mode={searchMode}
-          onModeChange={handleModeChange}
-          value={inputQuery}
-          onChange={setInputQuery}
-          onSearch={() => {
-            void handleSearch()
-          }}
+      {spotlightLoading ? (
+        <AnimeScrollRowSkeleton
+          title={spotlightCopy.title}
+          hint={spotlightCopy.hint}
+          spotlightMode={spotlightCopy.mode}
         />
+      ) : (
+        <AnimeScrollRow
+          title={spotlightCopy.title}
+          hint={spotlightCopy.hint}
+          spotlightMode={spotlightCopy.mode}
+          animes={spotlight}
+        />
+      )}
 
-        {busy && <p className="app__status">Loading…</p>}
-        {loadError && (
-          <p className="app__status app__status--error" role="alert">
-            {loadError}
-          </p>
-        )}
-        {searchError && (
-          <p className="app__status app__status--error" role="alert">
-            {searchError}
-          </p>
-        )}
+      {searchBusy && !loading && (
+        <p className="app__status">Looking up studio…</p>
+      )}
+      {loadError && (
+        <p className="app__status app__status--error" role="alert">
+          {loadError}
+        </p>
+      )}
+      {searchError && (
+        <p className="app__status app__status--error" role="alert">
+          {searchError}
+        </p>
+      )}
 
-        {showList && <AnimeList animes={animes} />}
+      {loading && !loadError && (
+        <AnimeListSkeleton count={listSkeletonCount} />
+      )}
+      {showList && <AnimeList animes={animes} />}
 
-        {showList && pagination !== null && (
-          <nav className="pagination" aria-label="Page navigation">
-            <button
-              type="button"
-              className="pagination__btn"
-              disabled={pagination.current_page <= 1}
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
-            >
-              Previous
-            </button>
-            <span className="pagination__info">
-              Page {pagination.current_page} of{' '}
-              {pagination.last_visible_page}
-            </span>
-            <button
-              type="button"
-              className="pagination__btn"
-              disabled={!pagination.has_next_page}
-              onClick={() => setPage((p) => p + 1)}
-            >
-              Next
-            </button>
-          </nav>
-        )}
-      </main>
-    </div>
+      {showList && pagination !== null && (
+        <PaginationNav pagination={pagination} onGoToPage={goToPage} />
+      )}
+    </main>
   )
 }

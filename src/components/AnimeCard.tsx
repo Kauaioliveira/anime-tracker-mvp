@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Star } from 'lucide-react'
 import type { Anime } from '../types/anime.ts'
-import { useFavoritesContext } from '../context/FavoritesContext.tsx'
+import { useUserLists } from '../context/UserListsContext.tsx'
 
 type AnimeCardProps = {
   anime: Anime
@@ -19,7 +19,7 @@ function releaseYear(aired: Anime['aired']): string | null {
 export default function AnimeCard({ anime }: AnimeCardProps) {
   const { title, images, mal_id, aired, studios } = anime
   const src = images.jpg.image_url
-  const { isFavorite, toggleFavorite } = useFavoritesContext()
+  const { isFavorite, toggleFavorite } = useUserLists()
   const fav = isFavorite(mal_id)
 
   const favoriteItem = {
