@@ -1,10 +1,13 @@
 :root {
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-heading: 'Space Grotesk', 'Inter', system-ui, sans-serif;
   --text: #6b6375;
   --text-h: #08060d;
   --bg: #fff;
   --border: #e5e4e7;
   --accent-bg: rgba(170, 59, 255, 0.1);
   --accent-border: rgba(170, 59, 255, 0.5);
+  --accent-solid: #7c3aed;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -15,6 +18,7 @@
     --border: #2e303a;
     --accent-bg: rgba(192, 132, 252, 0.12);
     --accent-border: rgba(192, 132, 252, 0.45);
+    --accent-solid: #a78bfa;
   }
 }
 
@@ -28,7 +32,11 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: system-ui, sans-serif;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .visually-hidden {
@@ -240,7 +248,9 @@ body {
   border-radius: 8px;
   color: var(--text-h);
   text-decoration: none;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
 }
 
 .app-nav__link:hover {
@@ -259,8 +269,11 @@ body {
 
 .home-hero__title {
   margin: 0 0 0.5rem;
-  font-size: clamp(1.35rem, 4vw + 0.5rem, 1.85rem);
-  line-height: 1.2;
+  font-family: var(--font-heading);
+  font-size: clamp(1.6rem, 5vw + 0.5rem, 2.25rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
   color: var(--text-h);
 }
 
@@ -314,18 +327,20 @@ body {
 
 .scroll-row__title {
   margin: 0;
-  font-size: 1.2rem;
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
   color: var(--text-h);
 }
 
 .scroll-row__hint {
   margin: 0;
-  font-size: 0.8rem;
-  line-height: 1.4;
+  font-size: 0.82rem;
+  line-height: 1.5;
   color: var(--text);
   max-width: 42rem;
+  letter-spacing: 0.005em;
 }
 
 .scroll-row__viewport {
@@ -474,7 +489,8 @@ body {
 
 .scroll-row__card-title {
   font-size: 0.78rem;
-  line-height: 1.3;
+  font-weight: 500;
+  line-height: 1.35;
   font-weight: 600;
   color: var(--text-h);
   display: -webkit-box;
@@ -533,12 +549,14 @@ body {
   }
 
   .search-bar__select {
-    padding: 0.25rem 0.325rem;
+    padding: 0.4rem 0.5rem;
     border: 1px solid var(--border);
-    border-radius: 4px;
+    border-radius: 8px;
     background: var(--bg);
     color: var(--text-h);
     font: inherit;
+    font-size: 0.85rem;
+    font-weight: 500;
     cursor: pointer;
     min-width: 4.5rem;
   }
@@ -548,34 +566,68 @@ body {
     outline-offset: 0.5px;
   }
   
-  .search-bar__input {
+  .search-bar__input-wrap {
     flex: 1 1 12rem;
     min-width: 0;
-    padding: 0.25rem 0.375rem;
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    background: var(--bg);
-    color: var(--text-h);
-  }
-  
-  .search-bar__btn {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    justify-content: center;
-    min-width: 2.75rem;
-    min-height: 2.25rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    font: inherit;
-    border: 1px solid var(--accent-border);
-    background: var(--accent-bg);
-    color: var(--text-h);
-    cursor: pointer;
+    gap: 0.4rem;
+    padding: 0.4rem 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    transition: border-color 0.15s;
   }
 
-  .search-bar__btn-icon {
-    display: block;
+  .search-bar__input-wrap:focus-within {
+    border-color: var(--accent-border);
+  }
+
+  .search-bar__icon {
     flex-shrink: 0;
+    color: var(--text);
+    opacity: 0.55;
+  }
+
+  .search-bar__input-wrap:focus-within .search-bar__icon {
+    opacity: 0.85;
+    color: var(--text-h);
+  }
+
+  .search-bar__input {
+    flex: 1;
+    min-width: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: var(--text-h);
+    font: inherit;
+    font-size: 0.9rem;
+    outline: none;
+  }
+
+  .search-bar__input::placeholder {
+    color: var(--text);
+    opacity: 0.5;
+  }
+
+  .search-bar__btn {
+    flex-shrink: 0;
+    padding: 0.3rem 0.75rem;
+    border-radius: 6px;
+    border: none;
+    background: var(--accent-solid);
+    color: #fff;
+    font: inherit;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+
+  .search-bar__btn:hover {
+    opacity: 0.85;
   }
   
   .anime-list__empty {
@@ -681,10 +733,12 @@ body {
   }
   
   .anime-card__title {
-    font-size: 0.9rem;
+    font-size: 0.88rem;
+    font-weight: 600;
     margin: 0;
     padding: 0.5rem 0.6rem 0.25rem;
-    line-height: 1.25;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
     color: var(--text-h);
     min-height: calc(0.9rem * 1.25 * 3);
     display: -webkit-box;
@@ -736,8 +790,11 @@ body {
     flex: 1;
     min-width: min(200px, 100%);
     color: var(--text-h);
-    font-size: clamp(1.25rem, 3vw + 0.5rem, 1.75rem);
-    line-height: 1.25;
+    font-family: var(--font-heading);
+    font-size: clamp(1.4rem, 3.5vw + 0.5rem, 2rem);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
     overflow-wrap: anywhere;
     word-break: break-word;
   }
@@ -783,6 +840,8 @@ body {
     background: var(--bg);
     color: var(--text-h);
     font: inherit;
+    font-size: 0.88rem;
+    font-weight: 500;
   }
 
   .anime-detail__list-btn:hover:not(:disabled) {
@@ -834,7 +893,9 @@ body {
   
   .anime-detail__synopsis {
     max-width: 50rem;
-    line-height: 1.5;
+    line-height: 1.65;
+    font-size: 0.95rem;
+    color: var(--text);
   }
   
   .pagination {
@@ -880,7 +941,8 @@ body {
     background: var(--bg);
     color: var(--text-h);
     font: inherit;
-    font-size: 0.9rem;
+    font-size: 0.88rem;
+    font-weight: 500;
     cursor: pointer;
   }
 
@@ -914,6 +976,8 @@ body {
     background: var(--bg);
     color: var(--text-h);
     font: inherit;
+    font-size: 0.88rem;
+    font-weight: 500;
     cursor: pointer;
   }
 

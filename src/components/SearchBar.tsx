@@ -1,4 +1,4 @@
-import { ScanSearch } from 'lucide-react'
+import { Search } from 'lucide-react'
 import type { SearchMode } from '../types/searchMode.ts'
 
 type SearchBarProps = {
@@ -57,24 +57,26 @@ export default function SearchBar({
         </select>
       </label>
 
-      <input
-        className="search-bar__input"
-        type={inputType}
-        placeholder={placeholder}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        autoComplete="off"
-        min={mode === 'year' ? 1917 : undefined}
-        max={mode === 'year' ? new Date().getFullYear() + 2 : undefined}
-      />
-
-      <button
-        type="submit"
-        className="search-bar__btn"
-        aria-label="Search"
-      >
-        <ScanSearch size={18} className="search-bar__btn-icon" aria-hidden />
-      </button>
+      <div className="search-bar__input-wrap">
+        <Search size={16} className="search-bar__icon" aria-hidden />
+        <input
+          className="search-bar__input"
+          type={inputType}
+          placeholder={placeholder}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          autoComplete="off"
+          min={mode === 'year' ? 1917 : undefined}
+          max={mode === 'year' ? new Date().getFullYear() + 2 : undefined}
+        />
+        <button
+          type="submit"
+          className="search-bar__btn"
+          aria-label="Search"
+        >
+          Search
+        </button>
+      </div>
     </form>
   )
 }
