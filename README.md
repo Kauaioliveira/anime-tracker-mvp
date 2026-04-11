@@ -4,7 +4,7 @@ Aplicacao web desenvolvida com React, TypeScript e Vite para buscar animes, visu
 
 ## Preview
 
-![Anime Tracker preview](./public/Captura%20de%20tela%202026-04-11%20153246.png)
+![Anime Tracker preview](./public/animetr.png)
 
 ## Funcionalidades
 
