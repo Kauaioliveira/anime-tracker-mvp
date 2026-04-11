@@ -4,8 +4,7 @@ Aplicacao web desenvolvida com React, TypeScript e Vite para buscar animes, visu
 
 ## Preview
 
-![Anime Tracker preview](./public/animetr.png)
-
+![Anime Tracker preview](./public/anime-tr.png)
 ## Funcionalidades
 
 - Busca de animes por titulo
