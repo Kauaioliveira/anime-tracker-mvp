@@ -8,9 +8,9 @@ import {
 import { usePersistentAnimeList } from '../hooks/usePersistentAnimeList.ts'
 import type { FavoriteAnime } from '../types/anime.ts'
 
-const KEY_FAVORITES = 'anime-tracker-favorites'
-const KEY_WATCHED = 'anime-tracker-watched'
-const KEY_PLANNED = 'anime-tracker-planned'
+const KEY_FAVORITES = 'animezone-favorites'
+const KEY_WATCHED = 'animezone-watched'
+const KEY_PLANNED = 'animezone-planned'
 
 type UserListsContextValue = {
   favorites: FavoriteAnime[]

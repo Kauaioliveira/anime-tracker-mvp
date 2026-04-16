@@ -34,6 +34,12 @@ type PaginationNavProps = {
   onGoToPage: (page: number) => void
 }
 
+const pageBtnBase =
+  'min-w-9 cursor-pointer rounded-lg border border-[var(--border)] bg-[var(--bg)] px-2 py-1.5 font-inherit text-[0.92rem] font-medium text-[var(--text-h)] disabled:cursor-default disabled:opacity-100 hover:enabled:border-[var(--accent-border)] hover:enabled:bg-[var(--accent-bg)]'
+
+const navBtnBase =
+  'cursor-pointer rounded-lg border border-[var(--border)] bg-[var(--bg)] px-4 py-[0.45rem] font-inherit text-[0.92rem] font-medium text-[var(--text-h)] hover:enabled:border-[var(--accent-border)] hover:enabled:bg-[var(--accent-bg)] disabled:cursor-not-allowed disabled:opacity-45'
+
 export default function PaginationNav({
   pagination,
   onGoToPage,
@@ -43,12 +49,15 @@ export default function PaginationNav({
   const items = buildPageItems(current, last)
 
   return (
-    <nav className="pagination" aria-label="Page navigation">
-      <div className="pagination__bar">
-        <div className="pagination__controls">
+    <nav
+      className="mt-6 flex flex-col items-center gap-[0.65rem] py-3"
+      aria-label="Page navigation"
+    >
+      <div className="flex flex-wrap items-center justify-center gap-x-[0.85rem] gap-y-[0.65rem]">
+        <div className="flex flex-wrap items-center gap-[0.35rem]">
           <button
             type="button"
-            className="pagination__btn"
+            className={navBtnBase}
             disabled={current <= 1}
             onClick={() => onGoToPage(1)}
             aria-label="First page"
@@ -57,7 +66,7 @@ export default function PaginationNav({
           </button>
           <button
             type="button"
-            className="pagination__btn"
+            className={navBtnBase}
             disabled={current <= 1}
             onClick={() => onGoToPage(current - 1)}
             aria-label="Previous page"
@@ -66,12 +75,12 @@ export default function PaginationNav({
           </button>
         </div>
 
-        <ul className="pagination__pages">
+        <ul className="m-0 flex list-none flex-wrap items-center justify-center gap-[0.3rem] p-0">
           {items.map((item, idx) =>
             item === 'ellipsis' ? (
               <li
                 key={`e-${idx}`}
-                className="pagination__ellipsis"
+                className="select-none px-0.5 text-[0.95rem] text-[var(--text)]"
                 aria-hidden
               >
                 …
@@ -81,8 +90,10 @@ export default function PaginationNav({
                 <button
                   type="button"
                   className={
-                    'pagination__page-btn' +
-                    (item === current ? ' pagination__page-btn--current' : '')
+                    pageBtnBase +
+                    (item === current
+                      ? ' border-[var(--accent-border)] bg-[var(--accent-bg)] font-semibold'
+                      : '')
                   }
                   aria-label={`Page ${item}`}
                   aria-current={item === current ? 'page' : undefined}
@@ -96,10 +107,10 @@ export default function PaginationNav({
           )}
         </ul>
 
-        <div className="pagination__controls">
+        <div className="flex flex-wrap items-center gap-[0.35rem]">
           <button
             type="button"
-            className="pagination__btn"
+            className={navBtnBase}
             disabled={!has_next_page}
             onClick={() => onGoToPage(current + 1)}
             aria-label="Next page"
@@ -108,7 +119,7 @@ export default function PaginationNav({
           </button>
           <button
             type="button"
-            className="pagination__btn"
+            className={navBtnBase}
             disabled={current >= last}
             onClick={() => onGoToPage(last)}
             aria-label="Last page"
@@ -118,7 +129,7 @@ export default function PaginationNav({
         </div>
       </div>
 
-      <p className="pagination__info">
+      <p className="m-0 text-[0.95rem] text-[var(--text)]">
         Page {current} of {last}
       </p>
     </nav>

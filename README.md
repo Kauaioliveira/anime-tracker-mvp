@@ -1,10 +1,11 @@
-# Anime Tracker
+# AnimeZone
 
 Aplicacao web desenvolvida com React, TypeScript e Vite para buscar animes, visualizar detalhes e organizar listas pessoais como favoritos, assistidos e planejados.
 
 ## Preview
 
-![Anime Tracker preview](./public/anime-tr.png)
+![AnimeZone preview](./public/anime-tr.png)
+
 ## Funcionalidades
 
 - Busca de animes por titulo

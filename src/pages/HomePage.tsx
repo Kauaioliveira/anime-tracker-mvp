@@ -272,26 +272,16 @@ export default function HomePage() {
   const listSkeletonCount = Number.parseInt(LIMIT, 10) || 12
 
   return (
-    <main className="app__main">
-      <section className="home-hero" aria-labelledby="home-heading">
-        <h1 id="home-heading" className="home-hero__title">
-          Anime Tracker
-        </h1>
-        <p className="home-hero__description">
-          Track your favorite anime and keep lists of what you have watched and
-          what you plan to watch next.
-        </p>
+    <main className="mx-auto max-w-[1200px] px-5 pb-[max(2rem,env(safe-area-inset-bottom,0px))] pt-4 ps-[max(1.25rem,env(safe-area-inset-left,0px))] pe-[max(1.25rem,env(safe-area-inset-right,0px))]">
+      <section className="mb-5" aria-label="AnimeZone">
+        <img
+          src="/animezonesf.png"
+          alt="AnimeZone. Track your favorite anime and keep lists of what you have watched and what you plan to watch next."
+          className="mx-auto block h-auto w-full max-w-6xl"
+          decoding="async"
+          fetchPriority="high"
+        />
       </section>
-
-      <SearchBar
-        mode={searchMode}
-        onModeChange={handleModeChange}
-        value={inputQuery}
-        onChange={setInputQuery}
-        onSearch={() => {
-          void handleSearch()
-        }}
-      />
 
       {spotlightLoading ? (
         <AnimeScrollRowSkeleton
@@ -308,16 +298,26 @@ export default function HomePage() {
         />
       )}
 
+      <SearchBar
+        mode={searchMode}
+        onModeChange={handleModeChange}
+        value={inputQuery}
+        onChange={setInputQuery}
+        onSearch={() => {
+          void handleSearch()
+        }}
+      />
+
       {searchBusy && !loading && (
-        <p className="app__status">Looking up studio…</p>
+        <p className="mb-4 mt-0 text-[var(--text)]">Looking up studio…</p>
       )}
       {loadError && (
-        <p className="app__status app__status--error" role="alert">
+        <p className="mb-4 mt-0 text-red-700 dark:text-red-300" role="alert">
           {loadError}
         </p>
       )}
       {searchError && (
-        <p className="app__status app__status--error" role="alert">
+        <p className="mb-4 mt-0 text-red-700 dark:text-red-300" role="alert">
           {searchError}
         </p>
       )}

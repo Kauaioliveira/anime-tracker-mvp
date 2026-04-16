@@ -21,6 +21,12 @@ function formatAired(detail: AnimeDetail): string {
   return `${from.slice(0, 10)} → ${to.slice(0, 10)}`
 }
 
+const listBtnBase =
+  'inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--bg)] px-[0.85rem] py-2 font-inherit text-[0.94rem] font-medium text-[var(--text-h)] hover:enabled:border-[var(--accent-border)] hover:enabled:bg-[var(--accent-bg)] disabled:cursor-not-allowed disabled:opacity-50'
+
+const listBtnAccent =
+  ' border-[var(--accent-border)] bg-[var(--accent-bg)]'
+
 export default function AnimeDetailPage() {
   const { id } = useParams()
   const [anime, setAnime] = useState<AnimeDetail | null>(null)
@@ -78,26 +84,26 @@ export default function AnimeDetailPage() {
   }, [id])
 
   return (
-    <main className="app__main anime-detail">
+    <main className="mx-auto max-w-[1200px] px-5 pb-[max(2rem,env(safe-area-inset-bottom,0px))] pt-4 ps-[max(1.25rem,env(safe-area-inset-left,0px))] pe-[max(1.25rem,env(safe-area-inset-right,0px))]">
       {loading && <AnimeDetailSkeleton />}
       {error && (
-        <p className="app__status app__status--error" role="alert">
+        <p className="mb-4 mt-0 text-red-700 dark:text-red-300" role="alert">
           {error}
         </p>
       )}
 
       {!loading && !error && anime !== null && (
         <>
-          <div className="anime-detail__heading">
-            <h1 className="anime-detail__title">{anime.title}</h1>
-            <div className="anime-detail__actions">
+          <div className="mb-4 flex flex-wrap items-center gap-4 max-sm:justify-start sm:justify-between">
+            <h1 className="font-heading m-0 min-w-[200px] flex-1 text-[clamp(1.9rem,4vw+0.45rem,2.9rem)] font-bold leading-tight tracking-wide text-[var(--text-h)] [overflow-wrap:anywhere] break-words">
+              {anime.title}
+            </h1>
+            <div className="flex flex-1 flex-wrap items-center justify-end gap-2 max-sm:justify-start">
               <button
                 type="button"
                 className={
-                  'anime-detail__list-btn' +
-                  (isFavorite(anime.mal_id)
-                    ? ' anime-detail__list-btn--favorite'
-                    : '')
+                  listBtnBase +
+                  (isFavorite(anime.mal_id) ? listBtnAccent : '')
                 }
                 aria-label={
                   isFavorite(anime.mal_id)
@@ -115,15 +121,19 @@ export default function AnimeDetailPage() {
                 {isFavorite(anime.mal_id) ? (
                   <Star
                     size={20}
-                    className="anime-detail__fav-icon anime-detail__fav-icon--on"
+                    className="shrink-0 text-amber-600 dark:text-amber-300"
                     fill="currentColor"
                     strokeWidth={1.5}
                     aria-hidden
                   />
                 ) : (
-                  <Star size={20} className="anime-detail__fav-icon" aria-hidden />
+                  <Star
+                    size={20}
+                    className="shrink-0 text-[var(--text-h)]"
+                    aria-hidden
+                  />
                 )}
-                <span className="anime-detail__fav-label">
+                <span className="whitespace-nowrap">
                   {isFavorite(anime.mal_id)
                     ? 'In favorites'
                     : 'Favorites'}
@@ -133,10 +143,8 @@ export default function AnimeDetailPage() {
               <button
                 type="button"
                 className={
-                  'anime-detail__list-btn' +
-                  (isWatched(anime.mal_id)
-                    ? ' anime-detail__list-btn--active'
-                    : '')
+                  listBtnBase +
+                  (isWatched(anime.mal_id) ? listBtnAccent : '')
                 }
                 aria-label={
                   isWatched(anime.mal_id)
@@ -153,11 +161,16 @@ export default function AnimeDetailPage() {
               >
                 <CheckCircle2
                   size={20}
-                  className="anime-detail__list-icon"
+                  className={
+                    'shrink-0 text-[var(--text-h)]' +
+                    (isWatched(anime.mal_id)
+                      ? ' text-green-600 dark:text-green-400'
+                      : '')
+                  }
                   aria-hidden
                   strokeWidth={1.75}
                 />
-                <span className="anime-detail__fav-label">
+                <span className="whitespace-nowrap">
                   {isWatched(anime.mal_id) ? 'Watched' : 'Mark watched'}
                 </span>
               </button>
@@ -165,10 +178,8 @@ export default function AnimeDetailPage() {
               <button
                 type="button"
                 className={
-                  'anime-detail__list-btn' +
-                  (isPlanned(anime.mal_id)
-                    ? ' anime-detail__list-btn--active'
-                    : '')
+                  listBtnBase +
+                  (isPlanned(anime.mal_id) ? listBtnAccent : '')
                 }
                 aria-label={
                   isPlanned(anime.mal_id)
@@ -185,12 +196,12 @@ export default function AnimeDetailPage() {
               >
                 <Bookmark
                   size={20}
-                  className="anime-detail__list-icon"
+                  className="shrink-0 text-[var(--text-h)]"
                   aria-hidden
                   strokeWidth={1.75}
                   fill={isPlanned(anime.mal_id) ? 'currentColor' : 'none'}
                 />
-                <span className="anime-detail__fav-label">
+                <span className="whitespace-nowrap">
                   {isPlanned(anime.mal_id)
                     ? 'On plan to watch'
                     : 'Plan to watch'}
@@ -198,30 +209,33 @@ export default function AnimeDetailPage() {
               </button>
             </div>
           </div>
-          <div className="anime-detail__layout">
+          <div className="flex flex-wrap items-start gap-6">
             <img
-              className="anime-detail__img"
+              className="max-w-full rounded-[10px]"
               src={anime.images.jpg.large_image_url}
               alt=""
               width={300}
             />
-            <div>
+            <div className="text-[var(--text)]">
               <p>
-                <strong>Aired:</strong> {formatAired(anime)}
+                <strong className="text-[var(--text-h)]">Aired:</strong>{' '}
+                {formatAired(anime)}
               </p>
               <p>
-                <strong>Studios:</strong>{' '}
+                <strong className="text-[var(--text-h)]">Studios:</strong>{' '}
                 {anime.studios !== undefined && anime.studios.length > 0
                   ? anime.studios.map((s) => s.name).join(', ')
                   : '—'}
               </p>
               <p>
-                <strong>Score:</strong> {anime.score ?? '—'}
+                <strong className="text-[var(--text-h)]">Score:</strong>{' '}
+                {anime.score ?? '—'}
               </p>
               <p>
-                <strong>Episodes:</strong> {anime.episodes ?? '—'}
+                <strong className="text-[var(--text-h)]">Episodes:</strong>{' '}
+                {anime.episodes ?? '—'}
               </p>
-              <p className="anime-detail__synopsis">
+              <p className="max-w-[50rem] text-base leading-relaxed text-[var(--text)]">
                 {anime.synopsis ?? 'No synopsis.'}
               </p>
             </div>
