@@ -46,7 +46,7 @@ export default function AnimeScrollRowSkeleton({
         <p className="sr-only">Loading highlights.</p>
       </div>
       <div className="relative -mx-0.5 pb-2">
-        <ul className="flex list-none gap-4 overflow-x-auto overflow-y-hidden overscroll-x-contain px-0.5 py-2 [-webkit-overflow-scrolling:touch] [scrollbar-color:var(--accent-border)_transparent] [scrollbar-width:thin] snap-x snap-mandatory scroll-pl-2 scroll-pr-2 max-sm:gap-3 max-sm:scroll-pl-[max(0.2rem,env(safe-area-inset-left,0px))] max-sm:scroll-pr-[max(0.2rem,env(safe-area-inset-right,0px))] [&::-webkit-scrollbar]:h-[7px] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[linear-gradient(90deg,var(--accent-border),color-mix(in_srgb,var(--accent-border)_70%,var(--text-h)))] [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-[color-mix(in_srgb,var(--border)_35%,transparent)]">
+        <ul className="flex list-none gap-4 overflow-x-auto overflow-y-hidden overscroll-x-contain px-0.5 py-2 scroll-smooth snap-x snap-mandatory scroll-pl-2 scroll-pr-2 max-sm:gap-3 max-sm:scroll-pl-[max(0.2rem,env(safe-area-inset-left,0px))] max-sm:scroll-pr-[max(0.2rem,env(safe-area-inset-right,0px))] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           {Array.from({ length: PLACEHOLDER_COUNT }, (_, i) => (
             <li key={`scroll-sk-${i}`} className="w-[8.85rem] shrink-0 snap-start">
               <div className="pointer-events-none flex -m-0.5 cursor-default flex-col gap-1.5 rounded-[14px] p-0.5">
