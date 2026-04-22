@@ -4,7 +4,7 @@ Aplicacao web desenvolvida com React, TypeScript e Vite para buscar animes, visu
 
 ## Preview
 
-![AnimeZone preview](./public/anime-tr.png)
+![AnimeZone preview](./public/ani-ps.png)
 
 ## Funcionalidades
 

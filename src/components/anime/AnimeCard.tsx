@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Star } from 'lucide-react'
-import type { Anime } from '../types/anime.ts'
-import { useUserLists } from '../context/UserListsContext.tsx'
+import type { Anime } from '../../types/anime.ts'
+import { useUserLists } from '../../context/UserListsContext.tsx'
 
 type AnimeCardProps = {
   anime: Anime

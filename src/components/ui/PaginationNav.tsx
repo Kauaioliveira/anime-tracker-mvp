@@ -1,31 +1,46 @@
-import type { JikanPagination } from '../types/anime.ts'
+import { useEffect, useState, type FormEvent } from 'react'
+import type { JikanPagination } from '../../types/anime.ts'
 
 type PageItem = number | 'ellipsis'
 
+const VISIBLE_PAGES = 5
+
 function buildPageItems(current: number, last: number): PageItem[] {
-  if (last <= 1) {
-    return [1]
-  }
-  if (last <= 7) {
+  if (last <= 1) return [1]
+
+  if (last <= VISIBLE_PAGES + 2) {
     return Array.from({ length: last }, (_, i) => i + 1)
   }
-  const set = new Set<number>()
-  set.add(1)
-  set.add(last)
-  for (let p = current - 1; p <= current + 1; p++) {
-    if (p >= 1 && p <= last) {
-      set.add(p)
-    }
+
+  const half = Math.floor(VISIBLE_PAGES / 2)
+  let start = current - half
+  let end = current + half
+
+  if (start < 1) {
+    start = 1
+    end = VISIBLE_PAGES
   }
-  const sorted = [...set].sort((a, b) => a - b)
+  if (end > last) {
+    end = last
+    start = last - VISIBLE_PAGES + 1
+  }
+
   const out: PageItem[] = []
-  for (let i = 0; i < sorted.length; i++) {
-    const n = sorted[i]!
-    if (i > 0 && n - sorted[i - 1]! > 1) {
-      out.push('ellipsis')
-    }
-    out.push(n)
+
+  if (start > 1) {
+    out.push(1)
+    if (start > 2) out.push('ellipsis')
   }
+
+  for (let p = start; p <= end; p++) {
+    out.push(p)
+  }
+
+  if (end < last) {
+    if (end < last - 1) out.push('ellipsis')
+    out.push(last)
+  }
+
   return out
 }
 
@@ -40,6 +55,9 @@ const pageBtnBase =
 const navBtnBase =
   'cursor-pointer rounded-lg border border-[var(--border)] bg-[var(--bg)] px-4 py-[0.45rem] font-inherit text-[0.92rem] font-medium text-[var(--text-h)] hover:enabled:border-[var(--accent-border)] hover:enabled:bg-[var(--accent-bg)] disabled:cursor-not-allowed disabled:opacity-45'
 
+const jumpInputClass =
+  'w-[4.25rem] rounded-lg border border-[var(--border)] bg-[var(--bg)] px-2 py-[0.45rem] text-center font-inherit text-[0.92rem] text-[var(--text-h)] outline-none focus:border-[var(--accent-border)] focus:ring-1 focus:ring-[var(--accent-border)]'
+
 export default function PaginationNav({
   pagination,
   onGoToPage,
@@ -47,6 +65,24 @@ export default function PaginationNav({
   const { current_page: current, last_visible_page: last, has_next_page } =
     pagination
   const items = buildPageItems(current, last)
+
+  const [jumpInput, setJumpInput] = useState(String(current))
+
+  useEffect(() => {
+    setJumpInput(String(current))
+  }, [current])
+
+  const submitJump = (e: FormEvent) => {
+    e.preventDefault()
+    const n = Number.parseInt(jumpInput, 10)
+    if (!Number.isFinite(n)) {
+      setJumpInput(String(current))
+      return
+    }
+    const clamped = Math.min(Math.max(1, n), last)
+    onGoToPage(clamped)
+    setJumpInput(String(clamped))
+  }
 
   return (
     <nav
@@ -126,6 +162,37 @@ export default function PaginationNav({
           >
             Last
           </button>
+
+          <form
+            className="flex flex-wrap items-center gap-1.5 border-l border-[color-mix(in_srgb,var(--border)_70%,transparent)] ps-3 max-sm:w-full max-sm:justify-center max-sm:border-l-0 max-sm:border-t max-sm:pt-2 max-sm:ps-0"
+            onSubmit={submitJump}
+            aria-label="Go to page"
+          >
+            <label
+              htmlFor="pagination-jump-page"
+              className="whitespace-nowrap text-[0.85rem] text-[var(--text)]"
+            >
+              Page
+            </label>
+            <input
+              id="pagination-jump-page"
+              type="number"
+              name="page"
+              min={1}
+              max={last}
+              inputMode="numeric"
+              className={jumpInputClass}
+              value={jumpInput}
+              onChange={(e) => setJumpInput(e.target.value)}
+              aria-describedby="pagination-jump-hint"
+            />
+            <button type="submit" className={navBtnBase}>
+              Go
+            </button>
+            <span id="pagination-jump-hint" className="sr-only">
+              Enter a page number between 1 and {last}, then press Go.
+            </span>
+          </form>
         </div>
       </div>
 

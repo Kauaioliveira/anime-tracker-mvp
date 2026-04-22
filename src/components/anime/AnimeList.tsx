@@ -1,4 +1,4 @@
-import type { Anime } from '../types/anime.ts'
+import type { Anime } from '../../types/anime.ts'
 import AnimeCard from './AnimeCard.tsx'
 
 type AnimeListProps = {

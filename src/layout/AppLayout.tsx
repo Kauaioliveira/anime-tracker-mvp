@@ -1,4 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom'
+import HeaderQuickSearch from '../components/search/HeaderQuickSearch.tsx'
 
 const navLinkClass = ({ isActive }: { isActive: boolean }) =>
   [
@@ -11,10 +12,10 @@ const navLinkClass = ({ isActive }: { isActive: boolean }) =>
 export default function AppLayout() {
   return (
     <div className="min-h-screen bg-transparent">
-      <header className="relative z-[100] mx-auto max-w-[1200px] border-b border-[var(--border)] pt-[max(0.75rem,env(safe-area-inset-top,0px))] pe-[max(1.25rem,env(safe-area-inset-right,0px))] pb-3 ps-[max(1.25rem,env(safe-area-inset-left,0px))] text-left">
-        <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-start gap-x-5 gap-y-3">
+      <header className="sticky top-0 z-[100] border-b border-[var(--border)] bg-[var(--bg)]/80 backdrop-blur-lg pt-[max(0.75rem,env(safe-area-inset-top,0px))] pe-[max(1.25rem,env(safe-area-inset-right,0px))] pb-3 ps-[max(1.25rem,env(safe-area-inset-left,0px))] text-left">
+        <div className="mx-auto flex w-full max-w-[1200px] flex-wrap items-center gap-x-4 gap-y-3">
           <nav
-            className="relative z-[1] flex flex-wrap items-center gap-x-2 gap-y-1"
+            className="relative z-[1] flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1"
             aria-label="Main navigation"
           >
             <NavLink to="/" end className={navLinkClass}>
@@ -30,6 +31,7 @@ export default function AppLayout() {
               Plan to watch
             </NavLink>
           </nav>
+          <HeaderQuickSearch />
         </div>
       </header>
       <Outlet />

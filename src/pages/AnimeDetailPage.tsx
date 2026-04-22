@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Bookmark, CheckCircle2, Star } from 'lucide-react'
+import { JIKAN_BASE_URL } from '../config/jikanEnv.ts'
 import type { AnimeDetail, JikanAnimeDetailResponse } from '../types/anime.ts'
 import { fetchJikan, jikanErrorMessage } from '../lib/jikanFetch.ts'
 import { useUserLists } from '../context/UserListsContext.tsx'
-import AnimeDetailSkeleton from '../components/AnimeDetailSkeleton.tsx'
+import AnimeDetailSkeleton from '../components/anime/AnimeDetailSkeleton.tsx'
 
 function formatAired(detail: AnimeDetail): string {
   if (detail.aired?.string !== undefined && detail.aired.string !== '') {
@@ -57,7 +58,7 @@ export default function AnimeDetailPage() {
       setError(null)
       try {
         const res = await fetchJikan(
-          `https://api.jikan.moe/v4/anime/${encodeURIComponent(animeId)}`,
+          `${JIKAN_BASE_URL}/anime/${encodeURIComponent(animeId)}`,
         )
         if (!res.ok) {
           throw new Error(jikanErrorMessage(res.status))

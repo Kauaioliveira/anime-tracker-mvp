@@ -1,5 +1,5 @@
 import { CalendarDays, Trophy } from 'lucide-react'
-import type { SpotlightMode } from '../config/homeSpotlight.ts'
+import type { SpotlightMode } from '../../config/homeSpotlight.ts'
 
 const PLACEHOLDER_COUNT = 8
 

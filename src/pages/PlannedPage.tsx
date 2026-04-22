@@ -1,5 +1,5 @@
 import { useUserLists } from '../context/UserListsContext.tsx'
-import UserSavedAnimeList from '../components/UserSavedAnimeList.tsx'
+import UserSavedAnimeList from '../components/user/UserSavedAnimeList.tsx'
 
 export default function PlannedPage() {
   const { planned } = useUserLists()

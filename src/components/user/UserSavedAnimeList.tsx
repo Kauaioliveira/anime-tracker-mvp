@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
-import type { FavoriteAnime } from '../types/anime.ts'
-import { useUserListSkeletonGate } from '../hooks/useUserListSkeletonGate.ts'
-import AnimeListSkeleton from './AnimeListSkeleton.tsx'
+import type { FavoriteAnime } from '../../types/anime.ts'
+import { useUserListSkeletonGate } from '../../hooks/useUserListSkeletonGate.ts'
+import AnimeListSkeleton from '../anime/AnimeListSkeleton.tsx'
 
 type UserSavedAnimeListProps = {
   title: string

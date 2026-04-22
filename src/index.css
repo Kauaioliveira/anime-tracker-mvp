@@ -5,6 +5,9 @@
 @theme {
   --font-sans: 'Roboto', system-ui, sans-serif;
   --font-heading: 'Roboto', system-ui, sans-serif;
+  /* Home hero: Bangers (title), Michroma (tagline) */
+  --font-bangers: 'Bangers', cursive;
+  --font-michroma: 'Michroma', sans-serif;
 }
 
 :root {

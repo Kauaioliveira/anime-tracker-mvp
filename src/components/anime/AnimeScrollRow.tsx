@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { CalendarDays, ChevronLeft, ChevronRight, Trophy } from 'lucide-react'
-import type { SpotlightMode } from '../config/homeSpotlight.ts'
-import type { Anime } from '../types/anime.ts'
+import type { SpotlightMode } from '../../config/homeSpotlight.ts'
+import type { Anime } from '../../types/anime.ts'
 
 type AnimeScrollRowProps = {
   title: string

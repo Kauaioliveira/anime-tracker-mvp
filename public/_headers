@@ -1,0 +1,7 @@
+# Netlify: applies headers to all routes. GitHub Pages ignores this file.
+# CSP is injected at build into index.html (see vite.config.ts).
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()

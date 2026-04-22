@@ -7,7 +7,7 @@ import {
   TextField,
   type SvgIconProps,
 } from '@mui/material'
-import type { SearchMode } from '../types/searchMode.ts'
+import type { SearchMode } from '../../types/searchMode.ts'
 
 type SearchBarProps = {
   mode: SearchMode
@@ -60,7 +60,7 @@ export default function SearchBar({
       component="form"
       role="search"
       aria-label="Search anime"
-      className="mx-auto mb-6 box-border w-full max-w-xl"
+      className="mx-auto mb-8 box-border w-full max-w-xl"
       onSubmit={(e) => {
         e.preventDefault()
         onSearch()
@@ -118,7 +118,7 @@ export default function SearchBar({
           size="medium"
           className="w-full shrink-0 py-2 sm:w-auto"
         >
-          Search
+          Go
         </Button>
       </Box>
     </Box>
